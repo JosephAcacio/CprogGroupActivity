@@ -24,7 +24,7 @@ if(fp == NULL) { //error trapping
     exit(1);
 }
 
-for(a = 0; a < 3; a++) { //input record having 3 members
+for(a = 0; a < 4; a++) { //input record having 3 members
     printf("Enter name: ");
     scanf(" ");
     scanf("%s", &myfriend.name);
