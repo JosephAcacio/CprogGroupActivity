@@ -1,73 +1,76 @@
-#include<stdio.h>
+#include <stdio.h>
 #include<conio.h>
-#include<stdlib.h>
-#include<ctype.h>
+#include <stdlib.h>
+#include <process.h>
+#include <ctype.h>
 
-struct record {         //structure definition
+struct record //structure definition
+{
     char name[50];
     int age;
     float wage;
 };
 
-int main(){ 
-    FILE *fp, *tp;  //file declarations
+int main() //begin main program
+{
+    FILE *fp, *tp; //file declaration
     char key;
-
-    struct record myfriend = {"John", 20, 200.50}; 
+    struct record myfriend; //structure declaration
     char file[12];
+    int a;
 
     printf("Enter filename: ");
     gets(file);
-    
-    if((fp = fopen(file, "rb")) == NULL){ //open file for reading
-        printf("Error: File '%s' does not exist.", file);
+
+    if ((fp = fopen(file, "rb")) == NULL) //opening a file for reading only
+    {
+        printf("Error\n");
         exit(1);
     }
 
-    if((tp = fopen("temp.dat", "wb")) == NULL){ //open temporary file for writing
-        printf("Error creating temporary file.");
-        fclose(fp);  
+    if ((tp = fopen("temp.dat", "wb")) == NULL) //opening a file for writing only
+    {
+        printf("Error\n");
         exit(1);
     }
 
-    fwrite(&myfriend, sizeof(struct record), 1, fp);
-    fclose(fp);
-
-    if((fp = fopen(file, "rb")) == NULL){ //open file for reading
-        printf("Error");
-        exit(1);
-    }
-    
-    while (fread(&myfriend, sizeof(struct record), 1, fp) != 1){
-        printf("name: %s\nage: %d\nwage: %.2f\n", myfriend.name, myfriend.age, myfriend.wage); //display values
-        printf("edit(y/n) ");
-    
+    while (fread(&myfriend, sizeof(struct record), 1, fp) != 0) //reading a file
+    {
+        printf("Name: %s\nAge: %d\nWage: %.2f\n", myfriend.name, myfriend.age, myfriend.wage); //display values
+        printf("Edit? (y/n): ");
         key = toupper(getch());
-        if(key == 'Y'){
+
+        if (key == 'Y')
+        {
             printf("\nRe-enter name: ");
             scanf("%s", myfriend.name);
-            printf("Re-enter age: ");
+            printf("\nRe-enter age: ");
             scanf("%d", &myfriend.age);
-            printf("Re-enter wage: ");
+            printf("\nRe-enter wage: ");
             scanf("%f", &myfriend.wage);
-            fwrite(&myfriend, sizeof(struct record), 1, tp); 
-
         }
-        else{
-            break;
-        }
-        
+        fwrite(&myfriend, sizeof(struct record), 1, tp);
     }
 
-    // Closing the files
-    fclose(fp); 
+    fclose(fp); //closing the file
     fclose(tp);
-
-    // Removing original file and renaming the temporary file
     remove(file);
-    rename("temp.dat", "file");
-    
-    printf("\nFile '%s' updated successfully.\n", file);
+    rename("temp.dat", file);
 
+    if ((fp = fopen(file, "rb")) == NULL) //opening a file for reading only
+    {
+        printf("Error\n");
+        exit(1);
+    }
+
+    printf("\n\nNew file\n\n");
+
+    while (fread(&myfriend, sizeof(struct record), 1, fp) != 0)
+    {
+        printf("Name: %s\nAge: %d\nWage: %.2f\n", myfriend.name, myfriend.age, myfriend.wage);
+    }
+
+    fclose(fp);
+    getch();
     return 0;
 }
