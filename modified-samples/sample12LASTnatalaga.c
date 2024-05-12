@@ -69,7 +69,8 @@ int main() //begin main program
     {
         printf("Name: %s\nAge: %d\nWage: %.2f\n", myfriend.name, myfriend.age, myfriend.wage);
     }
-
+    // last
+    
     fclose(fp);
     getch();
     return 0;
